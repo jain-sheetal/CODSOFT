@@ -1,0 +1,131 @@
+
+# To-Do List Application in Python
+from datetime import datetime
+
+# List to store tasks
+tasks = []
+
+# Function to add a new task
+def add_task():
+    name = input("Enter task name: ")
+    description = input("Enter task description: ")
+    due_date = input("Enter due date (YYYY-MM-DD): ")
+    priority = input("Enter priority (Low/Medium/High): ")
+
+    # Validate date format
+    try:
+        datetime.strptime(due_date, "%Y-%m-%d")
+    except ValueError:
+        print("Invalid date format! Use YYYY-MM-DD.")
+        return
+
+    task_id = len(tasks) + 1
+    tasks.append({
+        "task_id": task_id,
+        "name": name,
+        "description": description,
+        "due_date": due_date,
+        "priority": priority,
+        "completed": False
+    })
+    print("Task added successfully!\n")
+
+# Function to view all tasks
+def view_tasks():
+    if not tasks:
+        print("No tasks available!\n")
+        return
+
+    print("\nTo-Do List:")
+    for task in tasks:
+        status = "✔ Completed" if task["completed"] else "❌ Pending"
+        print(f"ID: {task['task_id']} | Name: {task['name']} | Due: {task['due_date']} | Priority: {task['priority']} | Status: {status}")
+    print()
+
+# Function to mark a task as completed
+def mark_completed():
+    if not tasks:
+        print("No tasks available to mark as completed!\n")
+        return
+
+    task_id = input("Enter the task ID to mark as completed: ")
+    for task in tasks:
+        if str(task["task_id"]) == task_id:
+            task["completed"] = True
+            print("Task marked as completed!\n")
+            return
+    print("Task not found!\n")
+
+# Function to update a task
+def update_task():
+    if not tasks:
+        print("No tasks available to update!\n")
+        return
+
+    task_id = input("Enter the task ID to update: ")
+    for task in tasks:
+        if str(task["task_id"]) == task_id:
+            print(f"Updating Task: {task['name']}")
+            task["name"] = input(f"Enter new name (current: {task['name']}): ") or task["name"]
+            task["description"] = input(f"Enter new description (current: {task['description']}): ") or task["description"]
+            due_date = input(f"Enter new due date (current: {task['due_date']}): ") or task["due_date"]
+            priority = input(f"Enter new priority (current: {task['priority']}): ") or task["priority"]
+
+            # Validate new date format
+            try:
+                datetime.strptime(due_date, "%Y-%m-%d")
+                task["due_date"] = due_date
+            except ValueError:
+                print("Invalid date format! Keeping the old date.")
+
+            task["priority"] = priority
+            print("Task updated successfully!\n")
+            return
+    print("Task not found!\n")
+
+# Function to delete a task
+def delete_task():
+    if not tasks:
+        print("No tasks available to delete!\n")
+        return
+
+    task_id = input("Enter the task ID to delete: ")
+    for task in tasks:
+        if str(task["task_id"]) == task_id:
+            tasks.remove(task)
+            print("Task deleted successfully!\n")
+            return
+    print("Task not found!\n")
+
+# Main menu
+def main():
+    while True:
+        print("\nTo-Do List Application")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Mark Task as Completed")
+        print("4. Update Task")
+        print("5. Delete Task")
+        print("6. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            add_task()
+        elif choice == "2":
+            view_tasks()
+        elif choice == "3":
+            mark_completed()
+        elif choice == "4":
+            update_task()
+        elif choice == "5":
+            delete_task()
+        elif choice == "6":
+            print("Exiting the application. Goodbye!")
+            break
+        else:
+            print("Invalid choice! Please try again.\n")
+
+# Run the application
+if __name__ == "__main__":
+    main()
